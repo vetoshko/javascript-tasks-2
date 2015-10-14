@@ -19,38 +19,38 @@ module.exports.add = function add(name, phone, email) {
     }
 };
 
-function find_index(query) {
-    var good_index = [];
+function findIndex(query) {
+    var goodIndex = [];
     phoneBook.forEach(function (item, i, phoneBook) {
         if (item.name.indexOf(query) +
         item.phone.indexOf(query) +
         item.email.indexOf(query) > -3) {
-            good_index.push(i);
+            goodIndex.push(i);
         };
     });
-    return good_index;
+    return goodIndex;
 };
 
 module.exports.find = function find(query) {
     if (query == '') {
         for (var i = 0; i < phoneBook.length; i++) {
-            print_line(i);
+            printLine(i);
         };
     } else {
-        var id_x = find_index(query);
-        for (var item = 0; item < id_x.length; item++) {
-            print_line(id_x[item]);
+        var index = findIndex(query);
+        for (var item = 0; item < index.length; item++) {
+            printLine(index[item]);
         };
     }
 };
 
 module.exports.remove = function remove(query) {
-    var id_x = find_index(query);
-    id_x = id_x.reverse();
-    for (var i = 0; i < id_x.length; i++) {
+    var index = findIndex(query);
+    index = index.reverse();
+    for (var i = 0; i < index.length; i++) {
         phoneBook.splice(i, 1);
     };
-    console.log('** Удален ' + id_x.length + ' контакт');
+    console.log('** Удален ' + index.length + ' контакт');
 };
 
 module.exports.importFromCsv = function importFromCsv(filename) {
@@ -70,13 +70,13 @@ module.exports.showTable = function showTable(filename) {
 
 };
 
-function print_line(index) {
+function printLine(index) {
     console.log(phoneBook[index].name +
     ' ' + phoneBook[index].phone +
     ' ' + phoneBook[index].email);
 }
 function isDataCorrect(name, phone, email) {
-    var phone_re = /^\+?\d{1,11} ?-?((\(\d{3}\))|(\d{3})) ?-?\d{1,3} ?-?\d{1,3} ?-?\d{1,3}$/;
-    var email_re = /^\w*\@[\-a-zA-Zа-яА-Я]+(\.[\-a-zA-Zа-яА-Я]{2,})+$/;
-    return email_re.test(email) && phone_re.test(phone);
+    var phoneRegExp = /^\+?\d{1,11} ?-?((\(\d{3}\))|(\d{3})) ?-?\d{1,3} ?-?\d{1,3} ?-?\d{1,3}$/;
+    var emailRegExp = /^\w*\@[\-a-zA-Zа-яА-Я]+(\.[\-a-zA-Zа-яА-Я]{2,})+$/;
+    return emailRegExp.test(email) && phoneRegExp.test(phone);
 };

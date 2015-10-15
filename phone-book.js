@@ -19,16 +19,16 @@ module.exports.add = function add(name, phone, email) {
     }
 };
 
-function findIndex(query) {
-    var goodIndex = [];
+function findIndexes(query) {
+    var goodIndexes = [];
     phoneBook.forEach(function (item, i, phoneBook) {
         if (item.name.indexOf(query) +
         item.phone.indexOf(query) +
         item.email.indexOf(query) > -3) {
-            goodIndex.push(i);
+            goodIndexes.push(i);
         };
     });
-    return goodIndex;
+    return goodIndexes;
 };
 
 module.exports.find = function find(query) {
@@ -37,26 +37,26 @@ module.exports.find = function find(query) {
             printLine(i);
         };
     } else {
-        var index = findIndex(query);
-        for (var item = 0; item < index.length; item++) {
-            printLine(index[item]);
+        var indexes = findIndexes(query);
+        for (var item = 0; item < indexes.length; item++) {
+            printLine(indexes[item]);
         };
     }
 };
 
 module.exports.remove = function remove(query) {
-    var index = findIndex(query);
-    index = index.reverse();
-    for (var i = 0; i < index.length; i++) {
+    var indexes = findIndexes(query);
+    indexes = indexes.reverse();
+    for (var i = 0; i < indexes.length; i++) {
         phoneBook.splice(i, 1);
     };
-    console.log('** Удален ' + index.length + ' контакт');
+    console.log('** Удален ' + indexes.length + ' контакт');
 };
 
 module.exports.importFromCsv = function importFromCsv(filename) {
     var data = require('fs').readFileSync(filename, 'utf-8');
     var counter = 0;
-    data = data.split('\r\n');
+    data = data.split('\n');
     for (var i = 0; i < data.length; i++) {
         var tmp = data[i].split(';');
         if (module.exports.add(tmp[0], tmp[1], tmp[2])) {

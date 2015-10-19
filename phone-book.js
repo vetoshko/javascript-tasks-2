@@ -14,17 +14,24 @@ module.exports.add = function add(name, phone, email) {
         console.log('** Запись ' + name + ' добавлена');
         return true;
     } else {
-        console.log('** Невозможно добавить запись. Запись ' + name + ' некорректна.');
+        console.log('** Невозможно добавить запись. Запись ' + name + ' некорректна.\n');
         return false;
     }
 };
 
+function isQueryInData (currentContact, query) {
+    for(var propetry in currentContact) {
+        if (currentContact[propetry].toLowerCase().indexOf(query.toLowerCase()) > -1) {
+            return true;
+        }
+    };
+    return false;
+}
+
 function findIndexes(query) {
     var goodIndexes = [];
     phoneBook.forEach(function (item, i, phoneBook) {
-        if (item.name.indexOf(query) +
-        item.phone.indexOf(query) +
-        item.email.indexOf(query) > -3) {
+        if (isQueryInData(item, query)) {
             goodIndexes.push(i);
         };
     });
@@ -32,7 +39,7 @@ function findIndexes(query) {
 };
 
 module.exports.find = function find(query) {
-    if (query == '') {
+    if (query === '') {
         for (var i = 0; i < phoneBook.length; i++) {
             printLine(i);
         };
@@ -48,9 +55,9 @@ module.exports.remove = function remove(query) {
     var indexes = findIndexes(query);
     indexes = indexes.reverse();
     for (var i = 0; i < indexes.length; i++) {
-        phoneBook.splice(i, 1);
+        phoneBook.splice(indexes[i], 1);
     };
-    console.log('** Удален ' + indexes.length + ' контакт');
+    console.log('** Удален(ы) ' + indexes.length + ' контакта(ов)\n');
 };
 
 module.exports.importFromCsv = function importFromCsv(filename) {
@@ -63,7 +70,7 @@ module.exports.importFromCsv = function importFromCsv(filename) {
             counter++;
         };
     };
-    console.log('** Импортировано ' + counter + ' контактов из ' + filename + '.');
+    console.log('** Импортировано ' + counter + ' контактов из ' + filename + '.\n');
 };
 
 module.exports.showTable = function showTable(filename) {
@@ -72,11 +79,13 @@ module.exports.showTable = function showTable(filename) {
 
 function printLine(index) {
     console.log(phoneBook[index].name +
-    ' ' + phoneBook[index].phone +
-    ' ' + phoneBook[index].email);
+    ', ' + phoneBook[index].phone +
+    ', ' + phoneBook[index].email);
 }
+
+var PHONE_REGEXP = /^\+?\d{1,11} ?-?((\(\d{3}\))|(\d{3})) ?-?\d{1,3} ?-?\d{1,3} ?-?\d{1,3}$/;
+var EMAIL_REGEXP = /^\w*\@[\-a-zA-Zа-яА-Я]+(\.[\-a-zA-Zа-яА-Я]{2,})+$/;
+
 function isDataCorrect(name, phone, email) {
-    var phoneRegExp = /^\+?\d{1,11} ?-?((\(\d{3}\))|(\d{3})) ?-?\d{1,3} ?-?\d{1,3} ?-?\d{1,3}$/;
-    var emailRegExp = /^\w*\@[\-a-zA-Zа-яА-Я]+(\.[\-a-zA-Zа-яА-Я]{2,})+$/;
-    return emailRegExp.test(email) && phoneRegExp.test(phone);
+    return EMAIL_REGEXP.test(email) && PHONE_REGEXP.test(phone);
 };

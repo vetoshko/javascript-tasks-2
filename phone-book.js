@@ -20,8 +20,9 @@ module.exports.add = function add(name, phone, email) {
 };
 
 function isQueryInData (currentContact, query) {
+    query = query.toLowerCase();
     for(var propetry in currentContact) {
-        if (currentContact[propetry].toLowerCase().indexOf(query.toLowerCase()) > -1) {
+        if (currentContact[propetry].toLowerCase().indexOf(query) > -1) {
             return true;
         }
     };
@@ -39,6 +40,7 @@ function findIndexes(query) {
 };
 
 module.exports.find = function find(query) {
+    query = query || '';
     if (query === '') {
         for (var i = 0; i < phoneBook.length; i++) {
             printLine(i);
@@ -52,6 +54,7 @@ module.exports.find = function find(query) {
 };
 
 module.exports.remove = function remove(query) {
+    query = query || '';
     var indexes = findIndexes(query);
     indexes = indexes.reverse();
     for (var i = 0; i < indexes.length; i++) {
